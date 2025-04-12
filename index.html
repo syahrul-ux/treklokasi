@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tracking Link Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Create Tracking Link</h1>
+    <form id="linkForm">
+      <label>Enter your URL</label>
+      <input type="text" id="originalUrl" required placeholder="https://example.com">
+      <button type="submit">Generate Tracking Link</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    document.getElementById('linkForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const url = document.getElementById('originalUrl').value;
+
+      const res = await fetch('http://localhost:3000/create-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ originalUrl: url })
+      });
+      const data = await res.json();
+
+      document.getElementById('result').innerHTML = `
+        <p>Your Tracking Link:</p>
+        <a href="${data.trackingUrl}" target="_blank">${data.trackingUrl}</a>
+      `;
+    });
+  </script>
+</body>
+</html>
